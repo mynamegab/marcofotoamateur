@@ -7,8 +7,8 @@ app.use(cors({ origin: true, credentials: true }));
 
 app.use(express.json({ extended: false }));
 
-app.get('/', (req, res) => res.send('Hello world!'));
+app.get('/', (req, res) => res.send('Currently in development'));
 
-const port = process.env.PORT || 8082;
+const port = process.env.PORT || 8080;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));

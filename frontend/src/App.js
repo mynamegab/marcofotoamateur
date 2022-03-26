@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -7,8 +6,9 @@ function App() {
   const [content, setContent] = useState(0);
 
   useEffect(() => {
+    console.log(process.env);
     axios
-      .get('http://localhost:8082/')
+      .get(`${process.env.REACT_APP_BACKEND_URL}/`)
       .then(res => setContent(res.data))
   }, [])
 
