@@ -1,22 +1,10 @@
-import './App.css';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import './App.scss';
+import AlbumView from './album/AlbumView';
 
-function App() {
-  const [content, setContent] = useState(0);
-
-  useEffect(() => {
-    console.log(process.env);
-    axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}/api`)
-      .then(res => setContent(res.data))
-  }, [])
-
+export default () => {
   return (
-    <div className="App">
-      {content}
+    <div className="app">
+      <AlbumView />
     </div>
   );
-}
-
-export default App;
+};
