@@ -22,7 +22,7 @@ export const getAlbums = async () => {
         return albumListCache;
     }
 
-    const albums = await Album.find({}).sort('name');
+    const albums = await Album.find({ hidden: { $ne: true } }).sort('name');
 
     albumListCache = albums
         .filter(album => album.pictures.length > 0)
@@ -42,7 +42,7 @@ export const getAlbums = async () => {
             // lastUpdateTimestamp: moment(updatedAt).unix(),
             thumbnail: pictures[0]
         }));
-
+    
     return albumListCache;
 };
 

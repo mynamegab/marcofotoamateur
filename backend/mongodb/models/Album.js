@@ -18,6 +18,10 @@ const albumSchema = new mongoose.Schema({
     name: String,
     description: String,
     pictures: [pictureSchema],
+	hidden: {
+        type: Boolean,
+        default: false
+    },
     tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }]
 }, { timestamps: true });
 
