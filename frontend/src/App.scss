@@ -1,3 +1,28 @@
 .content {
     padding: 2em 0;
 }
+
+.app {
+    position: relative;
+    padding: 0 5%;
+
+    .retour {
+        position: absolute;
+        cursor: pointer;
+        font-size: 1.5em;
+        top: 5px;
+        z-index: 10;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    &.carousel-opened {
+        padding: 0;
+        
+        .album-overview{
+            display: none;
+        }
+    }
+}

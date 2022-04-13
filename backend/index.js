@@ -1,21 +1,43 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+import { initStorage } from './services/storage.service.js';
+import { initMongoDb } from './mongodb/index.js';
+import { initRoutes } from './routes/index.js';
+
+dotenv.config();
+
+// Prepare all connections
+await initStorage();
+await initMongoDb();
 
 const app = express();
 
+// Middlewares
+app.use(express.json({ extended: false }));
 app.use(cors({ origin: true, credentials: true }));
 
-app.use(express.json({ extended: false }));
+initRoutes(app);
 
-app.get('/api', (req, res) => res.send('Currently in development'));
-
-// Send all other requests to the frontend
+// Serve client
 app.use(express.static('dist'))
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist/index.html'));
+    res.sendFile(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/index.html'));
 });
 
-const port = process.env.PORT || 3000;
+/* Error handler middleware */
+app.use((err, req, res, next) => {
+    console.error(err.internalMessage || err.message, err.stack);
 
+    const statusCode = err.statusCode || 500;
+    res.status(statusCode)
+        .json({message: err.message});
+});
+
+// Open server
+const port = process.env.PORT;
 app.listen(port, () => console.log(`Server running on port ${port}`));
