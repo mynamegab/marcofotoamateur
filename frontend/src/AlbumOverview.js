@@ -3,24 +3,23 @@ import './AlbumOverview.scss';
 import { useEffect, useState } from "react";
 
 import { getPictures } from "./api/albums";
+import PicturePanel from './PicturePanel';
+import { useAppState } from './context/appState';
 
-export default ({album, onPictureChosen}) => {
+export default ({ onPictureChosen }) => {
+    const context = useAppState();
+    const currentAlbum = context.state.currentAlbum;
     const [pictures, setPictures] = useState([]);
+
     useEffect(() => {
-        getPictures(album.id).then(setPictures);
-    }, []);
+        getPictures(currentAlbum.id)
+            .then(setPictures);
+    }, [currentAlbum.id]);
 
     return (
         <div className="album-overview">
-            <h1>{album.name}</h1>
             <div className='album-pictures-container'>
-                {pictures.map((picture, i) => (
-                    <div className="album-picture-container" onClick={() => onPictureChosen({ pictures, initialSlide: i})} >
-                        <div className='picture-container'>
-                            <img className="picture" src={`https://storage.googleapis.com/marcofotoamateur-gallery/thumbnails/${picture.assetId}.${picture.format}`}/>
-                        </div>
-                    </div>
-                ))}
+                {pictures.map((picture, i) => <PicturePanel key={i} picture={picture} onClick={() => onPictureChosen({ pictures, initialSlide: i})} />)}
             </div>
         </div>
     );

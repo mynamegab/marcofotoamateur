@@ -1,10 +1,9 @@
-.content {
-    padding: 2em 0;
-}
-
 .app {
     position: relative;
-    padding: 0 5%;
+    margin: 0 12%;
+    min-height: 100%;
+    
+    background-color: #262830;
 
     .retour {
         position: absolute;
@@ -23,6 +22,31 @@
         
         .album-overview{
             display: none;
+        }
+    }
+
+    .app-simple-header {
+        background-color: #1d2028;
+        border-bottom: 2px solid #31436a;
+
+        margin-bottom: 2em;
+
+        .header-links {
+            display: flex;
+
+            > div {
+                padding: 2em;
+                cursor: pointer;
+                transition: all .1s;
+                
+                &:hover {
+                    background-color: #4f78c3;
+                }
+
+                &.selected, &:active {
+                    background-color: #31436a;
+                }
+            }
         }
     }
 }

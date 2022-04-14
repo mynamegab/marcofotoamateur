@@ -3,7 +3,8 @@ import './AlbumsOverview.scss';
 import { useEffect, useState } from "react";
 import moment from 'moment';
 
-import { getAlbums, getPictures } from "./api/albums";
+import { getAlbums } from "./api/albums";
+import AlbumPanel from './AlbumPanel';
 
 moment.locale('fr', {
     months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
@@ -68,7 +69,7 @@ moment.locale('fr', {
 
 moment.locale('fr');
 
-export default ({ onAlbumChosen }) => {
+export default () => {
     const [albums, setAlbums] = useState([]);
     useEffect(() => {
         getAlbums().then(setAlbums);
@@ -76,20 +77,9 @@ export default ({ onAlbumChosen }) => {
 
     return (
         <div className="albums-overview">
-            <h1>Albums</h1>
             <div className='albums-container'>
-                {albums.map(album => (
-                    <div className="album-container" onClick={() => onAlbumChosen(album)}>
-                        <h2>{album.name}</h2>
-                        <div className='album-details'>
-                            <span>{'Créé le ' + moment(album.creationTimestamp * 1000).format("D MMMM YYYY")}</span>
-                            <span>{album.pictureCount + ' Images'}</span>
-                        </div>
-
-                        <div className='picture-container'>
-                            <img className="picture" src={`https://storage.googleapis.com/marcofotoamateur-gallery/thumbnails/${album.thumbnail.assetId}.${album.thumbnail.format}`}/>
-                        </div>
-                    </div>
+                {albums.map((album, i) => (
+                    <AlbumPanel key={i} album={album} />
                 ))}
             </div>
         </div>

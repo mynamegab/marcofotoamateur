@@ -17,7 +17,7 @@
             border-radius: 0.3em;
     
             &:hover {
-                .picture-container > img.picture {
+                .picture-container > .lazy-loaded-image {
                     transform: translate(-50%, -50%) rotate(1deg) scale(1.1);
                 }
     
@@ -28,13 +28,12 @@
     
             h2 {
                 font-weight: normal;
-                margin: 0.3em 0;
             }
     
             .album-details {
                 display: flex;
                 flex-direction: column;
-                color: #bcccdd;
+                color: #b1cce9;
                 font-weight: lighter;
                 font-size: .7em;
             }
@@ -43,8 +42,8 @@
                 position: relative;
                 height: 200px;
                 overflow: hidden;
-                margin-top: 15px;
                 border-radius: 0.3em;
+                background-color: #4a81b1;
     
                 &::after {
                     content: '';
@@ -58,7 +57,7 @@
                     transition: all 300ms;
                 }
     
-                > img.picture {
+                .lazy-loaded-image {
                     position: absolute;
                     top: 50%;
                     left: 50%;
