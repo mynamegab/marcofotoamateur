@@ -7,12 +7,14 @@ export default ({
     return (
         <div className="albums-search-trace">
             <div><NavLink to="/albums">Albums</NavLink></div>
-            <div>
-                <span className="material-icons-outlined">
-                    chevron_right
-                </span>
-                <div>{albumName}</div>
-            </div>
+            {albumName && (
+                <div>
+                    <span className="material-icons-outlined">
+                        chevron_right
+                    </span>
+                    <div>{albumName}</div>
+                </div>
+            )}
         </div>
     );
 };

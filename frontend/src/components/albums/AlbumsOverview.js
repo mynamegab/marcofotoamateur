@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import AlbumPanel from './AlbumPanel';
 import useAlbums from '../../hooks/useAlbums';
+import AlbumsSearchTrace from './AlbumsSearchTrace';
 
 moment.locale('fr', {
     months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
@@ -73,6 +74,7 @@ export default () => {
 
     return (
         <div className="albums-overview">
+            <AlbumsSearchTrace />
             <div className='albums-container'>
                 {albums && Object.values(albums).map((album, i) => (
                     <AlbumPanel key={i} album={album} />

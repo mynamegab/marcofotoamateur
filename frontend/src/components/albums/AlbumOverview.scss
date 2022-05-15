@@ -1,15 +1,9 @@
 .album-overview {
-    margin-top: 1em;
-
     h1 {
         text-align: center;
         padding: 0.7em 0;
     }
 
-    .albums-search-trace {
-        margin-bottom: 1em;
-    }
-    
     .album-pictures-container {
         display: grid;
         grid-template-columns: repeat(auto-fit, 325px);
