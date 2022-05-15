@@ -2,12 +2,13 @@
     text-align: center;
     position: relative;
 
-    h1 {
+    h2 {
         color: #1d2028;
         position: absolute;
+        text-align: center;
         top: 0;
-        left: 50%;
-        transform: translateX(-50%);
+        left: 0;
+        right: 0;
         background-color: rgba(255, 255, 255, 0.15);
         padding: 0.5em 2em;
         white-space: nowrap;

@@ -18,7 +18,7 @@ export default () => {
 
     return (
         <div className="pictures-of-the-moment">
-            <h1>Photos du moment</h1>
+            <h2>Photos du moment</h2>
             
             <div className="carousel-container">
                 <SlickSlider { ...slickSettings }>
