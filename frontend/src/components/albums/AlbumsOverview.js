@@ -1,10 +1,9 @@
 import './AlbumsOverview.scss';
 
-import { useEffect, useState } from "react";
 import moment from 'moment';
 
-import { getAlbums } from "./api/albums";
 import AlbumPanel from './AlbumPanel';
+import useAlbums from '../../hooks/useAlbums';
 
 moment.locale('fr', {
     months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
@@ -70,15 +69,12 @@ moment.locale('fr', {
 moment.locale('fr');
 
 export default () => {
-    const [albums, setAlbums] = useState([]);
-    useEffect(() => {
-        getAlbums().then(setAlbums);
-    }, []);
+    const albums = useAlbums();
 
     return (
         <div className="albums-overview">
             <div className='albums-container'>
-                {albums.map((album, i) => (
+                {albums && Object.values(albums).map((album, i) => (
                     <AlbumPanel key={i} album={album} />
                 ))}
             </div>

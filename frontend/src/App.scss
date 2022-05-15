@@ -1,9 +1,35 @@
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .app {
+        margin: 0;
+    }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+    .app {
+        margin: 0 12%;
+    }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
+}
+
 .app {
-    position: relative;
-    margin: 0 12%;
     min-height: 100%;
     
-    background-color: #262830;
+    background-color: #1d2028;
 
     .retour {
         position: absolute;
@@ -17,36 +43,67 @@
         }
     }
 
-    &.carousel-opened {
-        padding: 0;
-        
-        .album-overview{
-            display: none;
-        }
-    }
-
     .app-simple-header {
-        background-color: #1d2028;
-        border-bottom: 2px solid #31436a;
-
-        margin-bottom: 2em;
+        border-bottom: 1px solid #262830;
 
         .header-links {
-            display: flex;
 
-            > div {
-                padding: 2em;
-                cursor: pointer;
-                transition: all .1s;
-                
-                &:hover {
-                    background-color: #4f78c3;
-                }
+            ul {
+                display: flex;
+                list-style-type: none;
+                padding: 0 1em;
 
-                &.selected, &:active {
-                    background-color: #31436a;
+                li {
+                    padding: 1em;
+
+                    a {
+                        padding: 1em;
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        transition: all 100ms;
+
+                        span {
+                            padding-right: .2em;
+                        }
+
+                        &:visited {
+                            color: inherit;
+                        }
+                        
+                        &:hover {
+                            color: #73a1e3;
+                            transition: all 200ms;
+    
+                            &:after {
+                                width: 100%;
+                                background-color: #73a1e3;
+                                transition: all 200ms;
+                            }
+                        }
+    
+                        &.active, &:active {
+                            color: #4e83d1;
+    
+                            &:after {
+                                width: 100%;
+                                background-color: #4e83d1;
+                            }
+                        }
+    
+                        &:after {
+                            content: '';
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            height: 2px;
+                            width: 0;
+                            background-color: #4e83d1;
+                            transition: all 100ms;
+                        }
+                    }
                 }
-            }
+                }
         }
     }
 }

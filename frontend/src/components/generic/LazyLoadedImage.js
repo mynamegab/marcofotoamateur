@@ -1,4 +1,4 @@
-import LazyLoadedImage from './LazyLoadedImage.scss';
+import './LazyLoadedImage.scss';
 
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -15,7 +15,6 @@ export default ({ src }) => {
 
     const loadImage = src => {
         const image = new Image();
-
         image.onload = () => {
             setLoading(false)
             cache[src] = image;
@@ -28,7 +27,7 @@ export default ({ src }) => {
         if (inView && loading) {
             loadImage(src);
         }
-    }, [inView]);
+    }, [inView, src]);
 
     return <img ref={ref} className={`lazy-loaded-image ${loading ? 'loading' : ''}`} src={loading ? null : src} />
 };

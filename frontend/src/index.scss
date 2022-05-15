@@ -34,3 +34,14 @@ html, body, #root {
   margin:0;
   padding:0;
 }
+
+
+a {
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+
+  &:visited {
+    color: inherit;
+  }
+}

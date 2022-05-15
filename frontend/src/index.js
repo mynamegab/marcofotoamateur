@@ -1,11 +1,17 @@
+import './index.scss';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.scss';
+
 import App from './App';
+import { StoreProvider } from './store/store';
+import { initialState, reducer } from './store/reducer';
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <StoreProvider initialState={initialState} reducer={reducer}>
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>
+    </StoreProvider>,
+    document.getElementById('root')
 );

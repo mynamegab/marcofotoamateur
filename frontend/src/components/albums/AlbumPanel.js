@@ -1,12 +1,13 @@
 import moment from 'moment';
-import { ACTIONS, useAppState } from './context/appState';
-import LazyLoadedImage from './LazyLoadedImage';
+import { useNavigate } from 'react-router';
+
+import LazyLoadedImage from '../generic/LazyLoadedImage';
 
 export default ({ album }) => {
-    const context = useAppState();
+    const nagivate = useNavigate();
 
     return (
-        <div className="album-container" onClick={() => context.dispatch({ type: ACTIONS.SELECT_ALBUM, album })}>
+        <div className="album-container" onClick={() => nagivate('./' + album.id)}>
             <div className='picture-container'>
                 <LazyLoadedImage src={`https://storage.googleapis.com/marcofotoamateur-gallery/thumbnails/${album.thumbnail.assetId}.${album.thumbnail.format}`} />
                 <div className="pictures-count">

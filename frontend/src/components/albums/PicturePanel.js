@@ -1,4 +1,4 @@
-import LazyLoadedImage from './LazyLoadedImage';
+import LazyLoadedImage from '../generic/LazyLoadedImage';
 
 export default ({ picture, onClick }) => {
     return (
