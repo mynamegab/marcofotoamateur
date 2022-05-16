@@ -24,7 +24,7 @@ publicApp.use(cors({ origin: true, credentials: true }));
 initPublicRoutes(publicApp);
 
 // Serve client
-publicApp.use(express.static('dist/app'))
+publicApp.use(express.static(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app/static')))
 publicApp.get('*', (req, res) => {
     res.sendFile(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app/index.html'));
 });
@@ -58,7 +58,7 @@ adminApp.use((err, req, res, next) => {
         .json({message: err.message});
 });
 
-adminApp.use(express.static('dist/app'))
+publicApp.use(express.static(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app/dashboard')))
 adminApp.get('*', (req, res) => {
     res.sendFile(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/dashboard/index.html'));
 });
