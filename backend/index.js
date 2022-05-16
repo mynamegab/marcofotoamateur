@@ -24,7 +24,7 @@ publicApp.use(cors({ origin: true, credentials: true }));
 initPublicRoutes(publicApp);
 
 // Serve client
-publicApp.use('/static', express.static(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app/static')));
+publicApp.use(express.static(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app')));
 publicApp.get('*', (req, res) => {
     res.sendFile(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app/index.html'));
 });
