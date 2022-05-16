@@ -8,16 +8,10 @@
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
-    .app {
-        margin: 0;
-    }
 }
 
 /* Large devices (laptops/desktops, 992px and up) */
 @media only screen and (min-width: 992px) {
-    .app {
-        margin: 0 12%;
-    }
 }
 
 /* Extra large devices (large laptops and desktops, 1200px and up) */
@@ -27,7 +21,6 @@
 
 .app {
     min-height: 100%;
-    
     background-color: #1d2028;
 
     .retour {

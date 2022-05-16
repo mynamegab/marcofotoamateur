@@ -6,6 +6,10 @@ const pictureSchema = new mongoose.Schema({
 		required: true,
 		unique: true
 	},
+	hidden: {
+        type: Boolean,
+        default: false
+    },
 	format: {
 		type: String,
 		required: true

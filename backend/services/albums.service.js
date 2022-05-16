@@ -16,15 +16,9 @@ export const getAlbum = async (albumId) => {
     return await Album.findOne({ _id: albumId });
 };
 
-let albumListCache = null;
 export const getAlbums = async () => {
-    if (albumListCache) {
-        return albumListCache;
-    }
-
-    const albums = await Album.find({ hidden: { $ne: true } }).sort('name');
-
-    albumListCache = albums
+    const albums = await Album.find({ hidden: { $ne: true } });
+    return albums
         .filter(album => album.pictures.length > 0)
         .map(({
             _id,
@@ -42,8 +36,6 @@ export const getAlbums = async () => {
             // lastUpdateTimestamp: moment(updatedAt).unix(),
             thumbnail: pictures[0]
         }));
-    
-    return albumListCache;
 };
 
 export const createAlbum = async ({ name, description, initialPictures }) => {

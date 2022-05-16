@@ -2,8 +2,7 @@ import { v4 } from "uuid";
 import sharp from 'sharp';
 
 import { getAlbum } from "./albums.service.js";
-import { getStorage, uploadImage } from "./storage.service.js";
-import { provideStorageConfig } from '../configs/storage.js';
+import { uploadImage } from "./storage.service.js";
 
 // Returns the required sharp options to resize the blob so that it is at least
 // 300px high and 400px wide
@@ -31,11 +30,11 @@ export const createThumbnail = async (blob) => (
 );
 
 // Returns the pictures found in the requested album
-export const getPictures = async (albumId) => {
+export const getPictures = async (albumId, filterHidden) => {
     const album = await getAlbum(albumId);
-    return (album.pictures || []).map(({
-        assetId, description, format
-    }) => ({ assetId, description, format }));
+    return (album.pictures || [])
+        .filter(picture => !filterHidden || !picture.hidden)
+        .map(({ assetId, description, format, _id, hidden }) => ({ id: _id, assetId, description, format, hidden }));
 };
 
 // Creates a thumbnail for the new picture, then uploads both the original and thumbnail blobs to storage
@@ -51,4 +50,31 @@ export const createPicture = async (format, blob) => {
     return assetId;
 };
 
-export default { createPicture, getPictures }
+export const updatePicture = async(albumId, pictureId, request) => {
+    const album = await getAlbum(albumId);
+
+    let updatedPicture;
+    album.pictures = album.pictures.map(picture => {
+        if (picture._id.toString() === pictureId) {
+            updatedPicture = picture;
+            if (request.hasOwnProperty('hidden')) {
+                picture.hidden = request.hidden;
+            }
+        }
+
+        return picture;
+    });
+
+    if (!updatedPicture) {
+        throw {
+            message: `Album with id ${albumId} does not contain picture with id ${pictureId}`,
+            statusCode: 404
+        };
+    }
+
+    await album.save();
+
+    return updatedPicture;
+};
+
+export default { createPicture, getPictures, updatePicture }
