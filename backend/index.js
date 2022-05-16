@@ -24,9 +24,9 @@ publicApp.use(cors({ origin: true, credentials: true }));
 initPublicRoutes(publicApp);
 
 // Serve client
-publicApp.use(express.static('dist/app'))
+publicApp.use(express.static(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app')))
 publicApp.get('*', (req, res) => {
-    res.sendFile('dist/app/index.html');
+    res.sendFile(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app/index.html'));
 });
 
 /* Error handler middleware */
@@ -41,8 +41,6 @@ publicApp.use((err, req, res, next) => {
 // Open server
 const publicPort = process.env.PUBLIC_PORT;
 publicApp.listen(publicPort, () => console.log(`Server running on port ${publicPort}`));
-
-
 
 
 
@@ -61,9 +59,9 @@ adminApp.use((err, req, res, next) => {
         .json({message: err.message});
 });
 
-publicApp.use(express.static('dist/dashboard'))
+adminApp.use(express.static(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/dashboard')))
 adminApp.get('*', (req, res) => {
-    res.sendFile('dist/dashboard/index.html');
+    res.sendFile(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/dashboard/index.html'));
 });
 
 const adminPort = process.env.ADMIN_PORT;
