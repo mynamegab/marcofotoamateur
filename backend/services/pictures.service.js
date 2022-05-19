@@ -1,7 +1,6 @@
 import { v4 } from "uuid";
 import sharp from 'sharp';
 
-import Album from "../mongodb/models/Album.js";
 import { getAlbum } from "./albums.service.js";
 import { uploadImage } from "./storage.service.js";
 
@@ -24,16 +23,23 @@ const getThumbailResizeOptions = async (blob) => {
 
 // Resize initial blob to thumbnail size
 // Returns the smaller blob
-export const createThumbnail = async (blob) => (
+const createThumbnail = async (blob) => (
     await sharp(blob)
         .resize(await getThumbailResizeOptions(blob))
         .toBuffer()
 );
 
 // Returns the pictures found in the requested album
-export const getPictures = async (albumId) => {
+export const getAllPictures = async (albumId) => {
     const album = await getAlbum(albumId);
     return (album.pictures || []);
+};
+
+// Returns all non hidden pictures found in the requested album
+export const getVisiblePictures = async (albumId) => {
+    const album = await getAlbum(albumId);
+    return (album.pictures || [])
+        .filter(picture => !picture.hidden);
 };
 
 // Creates a thumbnail for the new picture, then uploads both the original and thumbnail blobs to storage
@@ -44,6 +50,8 @@ export const createPicture = async (format, blob) => {
     const thumbnailBlob = await createThumbnail(blob);
 
     await uploadImage('thumbnails', assetId, format, thumbnailBlob);
+
+    // TODO: display instead of images and make smaller
     await uploadImage('images', assetId, format, blob);
     
     return assetId;
@@ -82,4 +90,4 @@ export const updatePicture = async(albumId, pictureId, request) => {
     return picture;
 };
 
-export default { createPicture, getPictures, updatePicture }
+export default { createPicture, updatePicture, getAllPictures, getVisiblePictures }

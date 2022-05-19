@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import moment from "moment";
 
 import Album from "../mongodb/models/Album.js";
 import { createPicture } from "./pictures.service.js";
 
+// Searches MongoDB for an album matching the provided albumId
 export const getAlbum = async (albumId) => {
     if (!mongoose.isValidObjectId(albumId)) {
         throw {
@@ -13,29 +13,23 @@ export const getAlbum = async (albumId) => {
         };
     }
 
-    return await Album.findOne({ _id: albumId });
+    const album = await Album.findOne({ _id: albumId });
+    if (album == null) {
+        throw {
+            message: `Album with id ${albumId} could not be found`,
+            statusCode: 404
+        };
+    }
+
+    return album;
 };
 
-export const getAlbums = async () => {
-    const albums = await Album.find({ hidden: { $ne: true } });
-    return albums
-        .filter(album => album.pictures.length > 0)
-        .map(({
-            _id,
-            name,
-            //description,
-            pictures,
-            createdAt,
-            //updatedAt
-        }) => ({
-            id: _id,
-            name,
-            // description,
-            pictureCount: pictures.filter(picture => !picture.hidden).length,
-            creationTimestamp: moment(createdAt).unix(),
-            // lastUpdateTimestamp: moment(updatedAt).unix(),
-            thumbnail: pictures[0]
-        }));
+export const getAllAlbums = async () => {
+    return await Album.find({});
+}
+
+export const getAllVisibleAlbums = async () => {
+    return await Album.find({ hidden: { $ne: true } });
 };
 
 export const createAlbum = async ({ name, description, initialPictures }) => {
@@ -61,4 +55,4 @@ export const createAlbum = async ({ name, description, initialPictures }) => {
     });
 };
 
-export default { getAlbums, createAlbum };
+export default { createAlbum, getAllAlbums, getAllVisibleAlbums, createAlbum };

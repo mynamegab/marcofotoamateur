@@ -6,6 +6,7 @@ import { provideStorageConfig } from '../configs/storage.js';
 
 let storage = null;
 
+// Connects to cloud storage and makes sure that the required bucket exists
 export const initStorage = async () => {
     const config = provideStorageConfig();
 
@@ -26,6 +27,7 @@ export const initStorage = async () => {
     console.log('Successfully connected to Google Cloud Storage.');
 };
 
+// Uploads a new image to the google cloud bucket
 export const uploadImage = async (folder, name, format, data) => {
     const config = provideStorageConfig();
 
@@ -36,5 +38,3 @@ export const uploadImage = async (folder, name, format, data) => {
         .file(path)
         .save(data);
 };
-
-export const getStorage = () => storage;

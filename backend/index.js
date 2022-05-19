@@ -1,68 +1,21 @@
 
 import dotenv from 'dotenv';
-import express from 'express';
-import cors from 'cors';
-import path, { dirname } from 'path';
+import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 import { initStorage } from './services/storage.service.js';
 import { initMongoDb } from './mongodb/index.js';
-import { initAdminRoutes, initPublicRoutes } from './routes/index.js';
+import { initPublicServer } from './servers/public.server.js';
+import { initAdminServer } from './servers/admin.server.js';
 
+// Load environment variables
 dotenv.config();
 
 // Prepare all connections
 await initStorage();
 await initMongoDb();
 
-const publicApp = express();
-
-// Middlewares
-publicApp.use(express.json());
-publicApp.use(cors({ origin: true, credentials: true }));
-
-initPublicRoutes(publicApp);
-
-// Serve client
-publicApp.use(express.static(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app')));
-publicApp.get('*', (req, res) => {
-    res.sendFile(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/app/index.html'));
-});
-
-/* Error handler middleware */
-publicApp.use((err, req, res, next) => {
-    console.error(err.internalMessage || err.message, err.stack);
-
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode)
-        .json({message: err.message});
-});
-
-// Open server
-const publicPort = process.env.PUBLIC_PORT;
-publicApp.listen(publicPort, () => console.log(`Server running on port ${publicPort}`));
-
-
-
-const adminApp = express();
-adminApp.use(express.json());
-adminApp.use(cors({ origin: true, credentials: true }));
-
-initAdminRoutes(adminApp);
-
-/* Error handler middleware */
-adminApp.use((err, req, res, next) => {
-    console.error(err.internalMessage || err.message, err.stack);
-
-    const statusCode = err.statusCode || 500;
-    res.status(statusCode)
-        .json({message: err.message});
-});
-
-adminApp.use(express.static(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/dashboard')));
-adminApp.get('*', (req, res) => {
-    res.sendFile(path.join(dirname(fileURLToPath(import.meta.url)), 'dist/dashboard/index.html'));
-});
-
-const adminPort = process.env.ADMIN_PORT;
-adminApp.listen(adminPort, () => console.log(`Server running on port ${adminPort}`));
+// Init servers
+const __dirname__ = dirname(fileURLToPath(import.meta.url));
+initAdminServer(__dirname__);
+initPublicServer(__dirname__);

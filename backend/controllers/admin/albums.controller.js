@@ -1,4 +1,4 @@
-import albumService from "../services/albums.service.js";
+import albumService from "../../services/albums.service.js";
 
 export const getAlbums = async (req, res, next) => {
     try {

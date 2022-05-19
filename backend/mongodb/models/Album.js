@@ -15,8 +15,7 @@ const pictureSchema = new mongoose.Schema({
 		required: true
 	},
 	title: String,
-	description: String,
-	tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }]
+	description: String
 }, { timestamps: true });
 
 const albumSchema = new mongoose.Schema({
@@ -27,7 +26,10 @@ const albumSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }]
+    type: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'AlbumType'
+	}
 }, { timestamps: true });
 
 export default mongoose.model('Album', albumSchema);
