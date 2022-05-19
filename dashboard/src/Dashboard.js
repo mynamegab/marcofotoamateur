@@ -4,6 +4,7 @@ import './Dashboard.scss';
 
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import PictureEditor from './components/PictureEditor';
 
 export default () => {
     const [albums, setAlbums] = useState([]);
@@ -29,28 +30,33 @@ export default () => {
         return tempAlbumNames;
     }, [albums]);
 
-    const renderPictures = (__pictures) => __pictures.map((picture, i) => (
-        <div key={i} className="picture-container">
-            <div className="picture-thumbnail">
-                <img src={`https://storage.googleapis.com/marcofotoamateur-gallery/thumbnails/${picture.assetId}.${picture.format}`} />
-            </div>
-            <button
-                onClick={async () => {
-                    await updatePicture(albumId, picture.id, {
-                        hidden: !picture.hidden
-                    });
-                    // todo
-                    await fetchPictures(albumId).then(setPictures);
-                }}
-            >
-                {picture.hidden ? "SHOW" : "HIDE"}
-            </button>
-        </div>
+    const _updatePicture = async (pictureId, data) => {
+        const updatedPicture = await updatePicture(albumId, pictureId, data);
+
+        setPictures(pictures.map(picture => {
+            if (picture._id === updatedPicture._id) {
+                return updatedPicture;
+            }
+
+            return picture;
+        }));
+    };
+
+    const renderPictures = (__pictures) => __pictures.map((picture) => (
+        <PictureEditor
+            key={picture._id}
+            albumId={albumId}
+            picture={picture}
+            onUpdateRequested={(data) => _updatePicture(picture._id, data)}
+        />
     ));
 
     return (
         <div className="dashboard">
-            <Dropdown options={options} onChange={(option) => setAlbumId(option.value)} value={options[0]} placeholder="Select an option" />
+            <div className="album-selector labeled-container container">
+                <label>Albums:</label>
+                <Dropdown options={options} onChange={(option) => setAlbumId(option.value)} value={options[0]} placeholder="Select an option" />
+            </div>
 
             <div className="pictures-container">
                 <h1>Visible</h1>

@@ -16,21 +16,24 @@ export default () => {
         <BrowserRouter >
             <div className="app">
                 <div className="app-simple-header">
+                    <div className="logo-container">
+                        <img src="./logo.png" />
+                    </div>
                     <div className="header-links">
-                    <ul>
-                        <li>
-                            <NavLink to="/">
-                                <span className="material-icons-outlined">home</span>
-                                Accueil
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/albums">
-                                <span className="material-icons-outlined">photo_library</span>
-                                Albums
-                            </NavLink>
-                        </li>
-                    </ul>
+                        <ul>
+                            <li>
+                                <NavLink to="/">
+                                    <span className="material-icons-outlined">home</span>
+                                    Accueil
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink to="/albums">
+                                    <span className="material-icons-outlined">photo_library</span>
+                                    Albums
+                                </NavLink>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 

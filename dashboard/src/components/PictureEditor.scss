@@ -1,0 +1,35 @@
+.picture-editor {
+    display: flex;
+
+    .picture-editor__actions-container {
+        padding-left: 1em;
+        margin-left: 1em;
+        border-left: 1px solid rgba(255, 255, 255, 0.2);
+
+        > .labeled-container {
+            margin-bottom: 1em;
+        }
+    }
+    
+    .picture-thumbnail {
+        width: 400px;
+        height: 300px;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    button {
+        padding: .5em 2em;
+        cursor: pointer;
+    }
+
+    .checkmark {
+        color: green;
+        cursor: pointer;
+        font-size: 20px;
+    }
+}

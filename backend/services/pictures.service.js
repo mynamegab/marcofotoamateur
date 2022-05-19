@@ -1,6 +1,7 @@
 import { v4 } from "uuid";
 import sharp from 'sharp';
 
+import Album from "../mongodb/models/Album.js";
 import { getAlbum } from "./albums.service.js";
 import { uploadImage } from "./storage.service.js";
 
@@ -30,11 +31,9 @@ export const createThumbnail = async (blob) => (
 );
 
 // Returns the pictures found in the requested album
-export const getPictures = async (albumId, filterHidden) => {
+export const getPictures = async (albumId) => {
     const album = await getAlbum(albumId);
-    return (album.pictures || [])
-        .filter(picture => !filterHidden || !picture.hidden)
-        .map(({ assetId, description, format, _id, hidden }) => ({ id: _id, assetId, description, format, hidden }));
+    return (album.pictures || []);
 };
 
 // Creates a thumbnail for the new picture, then uploads both the original and thumbnail blobs to storage
@@ -50,31 +49,37 @@ export const createPicture = async (format, blob) => {
     return assetId;
 };
 
+const isTitleUpdateRequestValid = (title) => {
+    return (
+        // Set title
+        (typeof title === 'string' && title.length)
+        // Clear title
+        || title === null
+    );
+}
+
 export const updatePicture = async(albumId, pictureId, request) => {
     const album = await getAlbum(albumId);
-
-    let updatedPicture;
-    album.pictures = album.pictures.map(picture => {
-        if (picture._id.toString() === pictureId) {
-            updatedPicture = picture;
-            if (request.hasOwnProperty('hidden')) {
-                picture.hidden = request.hidden;
-            }
-        }
-
-        return picture;
-    });
-
-    if (!updatedPicture) {
+    
+    const picture = album.pictures.id(pictureId);
+    if (!picture) {
         throw {
             message: `Album with id ${albumId} does not contain picture with id ${pictureId}`,
             statusCode: 404
         };
     }
 
+    if (request.hasOwnProperty('hidden') && typeof request.hidden === 'boolean') {
+        picture.hidden = request.hidden;
+    }
+
+    if (request.hasOwnProperty('title') && isTitleUpdateRequestValid(request.title)) {
+        picture.title = request.title;
+    }
+
     await album.save();
 
-    return updatedPicture;
+    return picture;
 };
 
 export default { createPicture, getPictures, updatePicture }

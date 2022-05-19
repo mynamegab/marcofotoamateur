@@ -1,28 +1,23 @@
 .dashboard {
+    margin: 1em;
 }
 
-.pictures-container {
+.album-selector {
+
+}
+
+.container {
+    padding: 1em;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1em;
+    margin: 1em 0;
+}
+
+.labeled-container {
     display: flex;
-    flex-direction: column;
+    align-items: center;
 
-    padding: 2em;
-}
-
-.picture-thumbnail {
-    width: 400px;
-    height: 300px;
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-    }
-}
-
-.picture-container {
-    display: flex;
-
-    button {
-        padding: 2em;
+    label {
+        padding-right: .5em;
     }
 }

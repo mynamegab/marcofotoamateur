@@ -14,6 +14,7 @@ const pictureSchema = new mongoose.Schema({
 		type: String,
 		required: true
 	},
+	title: String,
 	description: String,
 	tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }]
 }, { timestamps: true });

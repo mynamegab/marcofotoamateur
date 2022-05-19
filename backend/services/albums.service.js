@@ -19,7 +19,7 @@ export const getAlbum = async (albumId) => {
 export const getAlbums = async () => {
     const albums = await Album.find({ hidden: { $ne: true } });
     return albums
-        .filter(album => album.pictures.filter(picture => !picture.hidden).length > 0)
+        .filter(album => album.pictures.length > 0)
         .map(({
             _id,
             name,
