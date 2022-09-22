@@ -12,7 +12,7 @@ export const FileUploaderContainer = ({ albumId, uploadPicturesCallback }) => {
       <h4>Add new pictures</h4>
       <FileUploader
         multiple={true}
-        maxSize={20}
+        maxSize={55}
         handleChange={_files => {
           const fileWrappers = [];
           for (let i = 0; i < _files.length; i++) {
