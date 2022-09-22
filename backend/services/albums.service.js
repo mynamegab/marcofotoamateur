@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 import Album from "../mongodb/models/Album.js";
-import { createPicture } from "./pictures.service.js";
 
 // Searches MongoDB for an album matching the provided albumId
 export const getAlbum = async (albumId) => {
@@ -26,33 +25,38 @@ export const getAlbum = async (albumId) => {
 
 export const getAllAlbums = async () => {
     return await Album.find({});
-}
+};
 
 export const getAllVisibleAlbums = async () => {
     return await Album.find({ hidden: { $ne: true } });
 };
 
-export const createAlbum = async ({ name, description, initialPictures }) => {
-    const pictures = [];
-
-    // Uploading sequentially as to not overflow the storage, no idea what is its bandwidth with the trial
-    for (const rawPicture of initialPictures) {
-        const assetId = await createPicture(rawPicture.format, rawPicture.blob)
-
-        pictures.push({
-            assetId,
-            format: rawPicture.format,
-            description: rawPicture.description,
-            tags: rawPicture.tags || []
-        });
-    }
-
-    return await Album.create({
+export const createAlbum = async ({ name }) => {
+    const album = await Album.create({
         name,
-        description,
-        pictures,
-        tags: []
+        tags: [],
+        pictures: [],
+        hidden: true
     });
+
+    console.log("Created new album:" + album);
+    return album;
 };
 
-export default { createAlbum, getAllAlbums, getAllVisibleAlbums, createAlbum };
+export const updateAlbum = async (albumId, request) => {
+    const album = await getAlbum(albumId);
+    if (request.hasOwnProperty('hidden') && typeof request.hidden === 'boolean') {
+        album.hidden = request.hidden;
+    }
+
+    await album.save();
+
+    return album;
+};
+
+export const deleteAlbum = async (albumId) => {
+    // TODO : REMOVE PICTURES FROM STORAGE
+    await Album.deleteOne({ _id: albumId });
+};
+
+export default { createAlbum, getAlbum, getAllAlbums, getAllVisibleAlbums, updateAlbum, deleteAlbum };

@@ -1,4 +1,28 @@
 import axios from 'axios';
+import FormData from 'form-data';
+
+export const createAlbum = async (name) => (
+    axios.post(`${process.env.REACT_APP_DASHBOARD_BACKEND_URL}/albums`, { name })
+        .then(response => response.data)
+);
+
+export const updateAlbum = async (albumId, data) => (
+    axios.put(`${process.env.REACT_APP_DASHBOARD_BACKEND_URL}/albums/${albumId}`, data)
+        .then(response => response.data)
+);
+
+export const createPicture = async (albumId, title, data) => {
+    const formData = new FormData();
+    formData.append("file", data);
+    formData.append("title", title);
+
+    return (
+        axios.post(`${process.env.REACT_APP_DASHBOARD_BACKEND_URL}/albums/${albumId}/pictures`, formData, {
+            headers: data.getHeaders ? data.getHeaders() : { 'Content-Type': 'multipart/form-data' }
+        })
+            .then(response => response.data)
+    );
+}
 
 export const fetchAlbums = async () => (
     axios.get(`${process.env.REACT_APP_DASHBOARD_BACKEND_URL}/albums`)

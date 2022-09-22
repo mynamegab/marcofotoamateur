@@ -2,10 +2,6 @@
     margin: 1em;
 }
 
-.album-selector {
-
-}
-
 .container {
     padding: 1em;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -20,4 +16,8 @@
     label {
         padding-right: .5em;
     }
+}
+
+.file-uploader > label {
+    margin: 10px 0;
 }

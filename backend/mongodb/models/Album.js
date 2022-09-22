@@ -4,7 +4,8 @@ const pictureSchema = new mongoose.Schema({
 	assetId: {
 		type: String,
 		required: true,
-		unique: true
+		unique: true,
+		sparse: true,
 	},
 	hidden: {
         type: Boolean,
@@ -19,8 +20,11 @@ const pictureSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const albumSchema = new mongoose.Schema({
-    name: String,
-    description: String,
+	name: {
+		type: String,
+		required: true,
+		unique: true
+	},
     pictures: [pictureSchema],
 	hidden: {
         type: Boolean,

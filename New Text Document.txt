@@ -1,3 +1,0 @@
-forever stopall && killall node
-
-cd backend && rm -r dist && mkdir dist && cd dist && mkdir app dashboard && cd ../../frontend && npm run build && cp -a ./build/. ../backend/dist/app && cd ../dashboard && npm run build && cp -a ./build/. ../backend/dist/dashboard && cd ../backend && forever start index.js

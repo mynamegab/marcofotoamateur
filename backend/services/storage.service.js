@@ -27,8 +27,8 @@ export const initStorage = async () => {
     console.log('Successfully connected to Google Cloud Storage.');
 };
 
-// Uploads a new image to the google cloud bucket
-export const uploadImage = async (folder, name, format, data) => {
+// Uploads a new file to the google cloud bucket
+export const uploadFile = async (folder, name, format, data) => {
     const config = provideStorageConfig();
 
     const path = `${folder}/${name}.${format}`;

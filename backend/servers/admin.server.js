@@ -2,6 +2,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import bodyParser from 'body-parser';
 
 import { initAdminRoutes } from '../routes/index.js';
 import errorhandler from '../middlewares/errorhandler.js';
@@ -16,7 +17,7 @@ export const initAdminServer = (dirname) => {
 
     server = express();
 
-    server.use(express.json());
+    server.use(bodyParser.json({ limit: '100mb' }));
     server.use(cors({ origin: true, credentials: true }));
     
     initAdminRoutes(server);
