@@ -2,7 +2,7 @@ export const STORE_ALBUMS = 'APP/STORE_ALBUMS';
 export const STORE_ALBUM_PICTURES = 'APP/STORE_ALBUM_PICTURES';
 
 export const initialState = {
-
+    albums: {}
 };
 
 export const storeAlbums = (albums) => ({ type: STORE_ALBUMS, albums });

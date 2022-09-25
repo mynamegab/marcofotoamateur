@@ -43,10 +43,21 @@ export const createAlbum = async ({ name }) => {
     return album;
 };
 
+const isNameUpdateRequestValid = (name) => {
+    return (
+        // Update name
+        (typeof name === 'string' && name.length)
+    );
+}
+
 export const updateAlbum = async (albumId, request) => {
     const album = await getAlbum(albumId);
     if (request.hasOwnProperty('hidden') && typeof request.hidden === 'boolean') {
         album.hidden = request.hidden;
+    }
+
+    if (request.hasOwnProperty('name') && isNameUpdateRequestValid(request.name)) {
+        album.name = request.name;
     }
 
     await album.save();

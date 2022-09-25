@@ -5,6 +5,7 @@ import moment from 'moment';
 import AlbumPanel from './AlbumPanel';
 import useAlbums from '../../hooks/useAlbums';
 import AlbumsSearchTrace from './AlbumsSearchTrace';
+import { useMemo } from 'react';
 
 moment.locale('fr', {
     months : 'janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre'.split('_'),
@@ -71,12 +72,17 @@ moment.locale('fr');
 
 export default () => {
     const albums = useAlbums();
+    const orderedAlbums = useMemo(() => {
+        const tempAlbums = Object.values(albums);
+        tempAlbums.sort((a, b) => a.name.localeCompare(b.name));
+        return tempAlbums;
+    }, [albums])
 
     return (
         <div className="albums-overview">
             <AlbumsSearchTrace />
             <div className='albums-container'>
-                {albums && Object.values(albums).map((album, i) => (
+                {albums && orderedAlbums.map((album, i) => (
                     <AlbumPanel key={i} album={album} />
                 ))}
             </div>

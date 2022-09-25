@@ -9,7 +9,7 @@ export default () => {
     const albums = getAlbums(state);
 
     useEffect(async () => {
-        if (!albums) {
+        if (!albums || !Object.keys(albums).length) {
             const fetchedAlbums = await fetchAlbums();
             dispatch(storeAlbums(fetchedAlbums));
         }

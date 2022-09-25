@@ -12,7 +12,7 @@ export default ({ album }) => {
                 <LazyLoadedImage src={`https://storage.googleapis.com/marcofotoamateur-gallery/thumbnails/${album.thumbnail.assetId}.${album.thumbnail.format}`} />
                 <div className="pictures-count">
                     <span className="material-icons-outlined">image</span>
-                    {album.pictureCount + ' Images'}
+                    {`${album.pictureCount} image${album.pictureCount === 1 ? '' : 's'}`}
                 </div>
             </div>
             
