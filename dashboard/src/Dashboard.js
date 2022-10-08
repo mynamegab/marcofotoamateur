@@ -10,9 +10,12 @@ import { FileUploaderContainer } from './components/FileUploaderContainer';
 export default () => {
     const [albums, setAlbums] = useState({});
     const [albumId, setAlbumId] = useState(null);
+    const [currentAlbumName, setCurrentAlbumName] = useState("");
     const [newAlbumName, setNewAlbumName] = useState("");
     const [uploading, setUploading] = useState(false);
     const [uploadLog, setUploadLog] = useState([]);
+
+    const album = ((albums || {})[albumId] || {});
 
     const refreshAlbums = async () => {
         const _albums = await fetchAlbums()
@@ -29,13 +32,16 @@ export default () => {
         setAlbumId(_albums[0]._id);
     }, []);
 
+    useEffect(() => {
+        setCurrentAlbumName(album.name);
+    }, [albumId]);
+
     const options = useMemo(() => {
         const tempAlbumNames = Object.values(albums).map((album) => ({ value: album._id, label: album.name }));
         tempAlbumNames.sort((a, b) => a.label.localeCompare(b.label));
         return tempAlbumNames;
     }, [albums]);
 
-    const album = ((albums || {})[albumId] || {});
     const pictures = album.pictures || [];
 
     const _updatePicture = async (pictureId, data) => {
@@ -49,6 +55,11 @@ export default () => {
         });
 
         setAlbums({ ...albums });
+    };
+
+    const _updateAlbum = async (albumId, data) =>  {
+        const updatedAlbum = await updateAlbum(albumId, data);
+        updateCachedAlbum(updatedAlbum);
     };
 
     const renderPictures = (__pictures) => __pictures.map((picture) => (
@@ -109,7 +120,7 @@ export default () => {
                             value={newAlbumName}
                             onChange={(event) => setNewAlbumName(event.target.value)}
                         />
-                        <button disabled={!newAlbumName} onClick={async () => {
+                        <button disabled={newAlbumName} onClick={async () => {
                             setNewAlbumName("");
                             const newAlbum = await createAlbum(newAlbumName);
                             updateCachedAlbum(newAlbum);
@@ -121,13 +132,21 @@ export default () => {
                         <div>
                             <div className="container">
                                 <h4>Selected album</h4>
+                                <div className="album-name-container">
+                                    <input
+                                        value={currentAlbumName || ""}
+                                        onChange={(event) => setCurrentAlbumName(event.target.value)}
+                                    />
+                                    <button disabled={currentAlbumName === album.name} onClick={async () => {
+                                        _updateAlbum(albumId, { name: currentAlbumName })
+                                    }}>Update name</button>
+                                </div>
                                 <div>albumId={albumId}</div>
                                 <div>{pictures?.length} pictures</div>
                                 <div>Currently {album.hidden ? 'hidden' : 'visible'}</div>
                                 <button
                                     onClick={async () => {
-                                        const updatedAlbum = await updateAlbum(albumId, { hidden: !album.hidden });
-                                        updateCachedAlbum(updatedAlbum);
+                                        _updateAlbum(albumId, { hidden: !album.hidden });
                                     }}
                                 >
                                     Toggle to {album.hidden ? 'visible' : 'hidden'}

@@ -5,7 +5,7 @@ import { useInView } from "react-intersection-observer";
 
 const cache = {};
 
-export default ({ src }) => {
+export default ({ src, style }) => {
     const { ref, inView } = useInView({
         triggerOnce: true,
         threshold: 1,
@@ -29,5 +29,5 @@ export default ({ src }) => {
         }
     }, [inView, src]);
 
-    return <img ref={ref} className={`lazy-loaded-image ${loading ? 'loading' : ''}`} src={loading ? null : src} />
+    return <img style={style} ref={ref} className={`lazy-loaded-image ${loading ? 'loading' : ''}`} src={loading ? null : src} />
 };
