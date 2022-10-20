@@ -120,7 +120,7 @@ export default () => {
                             value={newAlbumName}
                             onChange={(event) => setNewAlbumName(event.target.value)}
                         />
-                        <button disabled={newAlbumName} onClick={async () => {
+                        <button disabled={!newAlbumName} onClick={async () => {
                             setNewAlbumName("");
                             const newAlbum = await createAlbum(newAlbumName);
                             updateCachedAlbum(newAlbum);
