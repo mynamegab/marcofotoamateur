@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { createAlbum, createPicture, fetchAlbums, fetchPictures, updateAlbum, updatePicture } from './api/albums';
+import { createAlbum, createPicture, fetchAlbums, getHomepage, updateAlbum, updatePicture } from './api/albums';
 import './Dashboard.scss';
 
 import Dropdown from 'react-dropdown';
@@ -8,6 +8,7 @@ import PictureEditor from './components/PictureEditor';
 import { FileUploaderContainer } from './components/FileUploaderContainer';
 
 export default () => {
+    const [homepage, setHomepage] = useState({ picturesOfTheMoment: [] })
     const [albums, setAlbums] = useState({});
     const [albumId, setAlbumId] = useState(null);
     const [currentAlbumName, setCurrentAlbumName] = useState("");
@@ -26,6 +27,11 @@ export default () => {
 
         return _albums;
     };
+
+    useEffect(async () => {
+        const _homepage = await getHomepage();
+        setHomepage(_homepage);
+    }, []);
 
     useEffect(async () => {
         const _albums = await refreshAlbums();
@@ -57,6 +63,11 @@ export default () => {
         setAlbums({ ...albums });
     };
 
+    const _updatePicturesOfTheMoment = async (updatedList) => {
+        const _homepage = { ...homepage, picturesOfTheMoment: updatedList };
+        setHomepage(_homepage);
+    };
+
     const _updateAlbum = async (albumId, data) =>  {
         const updatedAlbum = await updateAlbum(albumId, data);
         updateCachedAlbum(updatedAlbum);
@@ -67,7 +78,9 @@ export default () => {
             key={picture._id}
             albumId={albumId}
             picture={picture}
+            homepage={homepage}
             onUpdateRequested={(data) => _updatePicture(picture._id, data)}
+            updatePicturesOfTheMoment={_updatePicturesOfTheMoment}
         />
     ));
 
@@ -105,6 +118,12 @@ export default () => {
 
             {!uploading && (
                 <div className="dashboard">
+                    <div className="container">
+                        <h3>Homepage</h3>
+                        
+                        <div>{`There are currently ${homepage.picturesOfTheMoment.length} pictures of the day`}</div>
+                    </div>
+
                     <div className="container">
                         <h3>Albums</h3>
                         <Dropdown

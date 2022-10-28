@@ -3,6 +3,7 @@ import sharp from 'sharp';
 
 import { getAlbum } from "./albums.service.js";
 import { uploadFile } from "./storage.service.js";
+import Album from "../mongodb/models/Album.js";
 
 // Returns the required sharp options to resize the blob so that it is maximum the provided dimensions
 const getResizeOptions = async (blob, { requiredMinHeight, requiredMinWidth }) => {
@@ -31,10 +32,24 @@ export const getAllPictures = async (albumId) => {
     return (album.pictures || []);
 };
 
+export const getPicturesById = async (picturesOfTheMoment) => {
+    const pictureIds = picturesOfTheMoment.map(({ pictureId }) => pictureId);
+    const albums = await Album.find({ pictures: { $elemMatch: { _id: { $in: pictureIds } } }  });
+
+    return albums
+        .reduce((prev, curr) => prev.concat(curr.pictures || []), [])
+        .filter(picture => pictureIds.indexOf(picture._id.toString()) > -1);
+};
+
 // Returns all non hidden pictures found in the requested album
 export const getVisiblePictures = async (albumId) => {
     const pictures = await getAllPictures(albumId);
     return pictures.filter(picture => !picture.hidden);
+};
+
+export const pictureExists = async (pictureId) => {
+    const albumWithPicture = await Album.findOne({ pictures: { $elemMatch: { _id: pictureId } }  });
+    return !!albumWithPicture;
 };
 
 // TODO: Only stream blob once

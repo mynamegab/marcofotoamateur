@@ -1,6 +1,6 @@
 import picturesService from "../../services/pictures.service.js";
 
-const mapPictureToDto = ({
+export const mapPictureToDto = ({
     assetId,
     description,
     format,

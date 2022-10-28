@@ -1,6 +1,21 @@
 import axios from 'axios';
 import FormData from 'form-data';
 
+export const getHomepage = async () => (
+    axios.get(`${process.env.REACT_APP_DASHBOARD_BACKEND_URL}/homepage`)
+        .then(response => response.data)
+);
+
+export const addPictureOfTheMoment = async (pictureId) => (
+    axios.put(`${process.env.REACT_APP_DASHBOARD_BACKEND_URL}/homepage/pictures-of-the-moment/${pictureId}`)
+        .then(response => response.data)
+);
+
+export const removePictureOfTheMoment = async (pictureId) => (
+    axios.delete(`${process.env.REACT_APP_DASHBOARD_BACKEND_URL}/homepage/pictures-of-the-moment/${pictureId}`)
+        .then(response => response.data)
+);
+
 export const createAlbum = async (name) => (
     axios.post(`${process.env.REACT_APP_DASHBOARD_BACKEND_URL}/albums`, { name })
         .then(response => response.data)

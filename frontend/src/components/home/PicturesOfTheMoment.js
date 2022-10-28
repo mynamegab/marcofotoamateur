@@ -1,23 +1,10 @@
 import "./PicturesOfTheMoment.scss";
 
 import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 'react-stacked-center-carousel';
-import { useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { memo } from "react";
 
-const data = [
-    {
-        cover: 'https://storage.googleapis.com/marcofotoamateur-gallery/display/569e5f21-f39f-4849-a891-d022cfc2b063.JPG',
-        title: 'Interstaller'
-    },
-    {
-        cover: 'https://storage.googleapis.com/marcofotoamateur-gallery/display/d9728ac6-0f60-4d31-8b79-0b104a588d1c.JPG',
-        title: 'Interstaller'
-    },
-    {
-        cover: 'https://storage.googleapis.com/marcofotoamateur-gallery/display/faf9e0ca-ca8b-4df9-9e1e-204a7e48e6e9.JPG',
-        title: 'Interstaller'
-    }
-];
+
 
 // Very important to memoize your component!!!
 const Card = memo(
@@ -40,41 +27,66 @@ const Card = memo(
 );
 
 function ResponsiveCarousel({
-    onRef
+    onRef,
+    pictures
 }) {
     const ref = useRef();
+    const data = useMemo(() => {
+        return pictures.map(picture => ({
+            cover: `https://storage.googleapis.com/marcofotoamateur-gallery/display/${picture.assetId}.${picture.format}`
+        }))
+    }, pictures);
+
+    const slides = data.length < 3
+        ? 1
+        : 3
+
     return (
       <div style={{ width: '100%', position: 'relative' }}>
             <ResponsiveContainer carouselRef={ref} render={(parentWidth, carouselRef) => {
                 onRef(ref);
-              return (
-                  <StackedCarousel
-                          ref={carouselRef}
-                          data={data}
-                          carouselWidth={parentWidth}
-                          slideWidth={1000}
-                          slideComponent={Card}
-                          maxVisibleSlide={3}
-                          currentVisibleSlide={3}
-                          transitionTime={500}
-                  />
-              )
+                return (
+                    <StackedCarousel
+                            ref={carouselRef}
+                            data={data}
+                            carouselWidth={parentWidth}
+                            slideWidth={1000}
+                            slideComponent={Card}
+                            maxVisibleSlide={slides}
+                            currentVisibleSlide={slides}
+                            transitionTime={500}
+                    />
+                );
             }}/>
       </div>
     );
 };
 
 let timeout = null;
-export default () => {
+export default ({ pictures }) => {
+    useEffect(() => {
+        return () => {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+        };
+    }, []);
+
+    if (pictures.length === 0) {
+        return null;
+    }
+
     return (
         <div className="pictures-of-the-moment">
             <h2>Photos du moment</h2>
             
             <div className="carousel-container">
-                <ResponsiveCarousel onRef={(ref) => {
+                <ResponsiveCarousel pictures={pictures} onRef={(ref) => {
                     if (!timeout && ref) {
                         timeout = setInterval(() => {
-                            ref.current.goNext();
+                            if (ref) {
+                                ref.current.goNext();
+                            }
                         }, 5000);
                     }
                 }}/>

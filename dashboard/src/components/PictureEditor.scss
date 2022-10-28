@@ -1,6 +1,10 @@
 .picture-editor {
     display: flex;
 
+    &.picture-of-the-moment {
+        border-color: green;
+    }
+
     .picture-editor__actions-container {
         padding-left: 1em;
         margin-left: 1em;
