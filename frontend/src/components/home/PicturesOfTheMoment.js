@@ -4,28 +4,6 @@ import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 
 import { useEffect, useMemo, useRef } from "react";
 import { memo } from "react";
 
-
-
-// Very important to memoize your component!!!
-const Card = memo(
-    function (props) {
-        const { data, dataIndex } = props;
-        const { cover } = data[dataIndex];
-        return (
-            <div style={{width: '100%', height: 600}}>
-                <img
-                    style={{height: '100%', width: '100%', objectFit: 'cover', borderRadius: 10}}
-                    draggable={false}
-                    src={cover}
-                />
-            </div>
-        );
-    },
-    function (prev, next) {
-      return prev.dataIndex === next.dataIndex;
-    }
-);
-
 function ResponsiveCarousel({
     onRef,
     pictures
@@ -37,24 +15,62 @@ function ResponsiveCarousel({
         }))
     }, pictures);
 
-    const slides = data.length < 3
-        ? 1
-        : 3
-
     return (
       <div style={{ width: '100%', position: 'relative' }}>
             <ResponsiveContainer carouselRef={ref} render={(parentWidth, carouselRef) => {
                 onRef(ref);
+
+                const oddAvailableSlides = data.length < 5
+                    ? (data.length < 3
+                        ? 1
+                        : 3)
+                    : 5
+
+                let currentVisibleSlide = 5;
+                if (parentWidth <= 1440) currentVisibleSlide = 3;
+                if (parentWidth <= 1080) currentVisibleSlide = 1;
+
+                const getSlideWidth = () => {
+                    if (parentWidth > 1440) {
+                        return 1000;
+                    }
+
+                    if (parentWidth > 1000) {
+                        return 750;
+                    }
+
+                    return parentWidth - 0.1 * parentWidth;
+                };
+
+                const Card = memo(
+                    function (props) {
+                        const { data, dataIndex } = props;
+                        const { cover } = data[dataIndex];
+                        return (
+                            <div style={{ width: '100%', height: getSlideWidth() * 0.6 }}>
+                                <img
+                                    style={{height: '100%', width: '100%', objectFit: 'cover', borderRadius: 10}}
+                                    draggable={false}
+                                    src={cover}
+                                />
+                            </div>
+                        );
+                    },
+                    function (prev, next) {
+                      return prev.dataIndex === next.dataIndex;
+                    }
+                );
+
                 return (
                     <StackedCarousel
-                            ref={carouselRef}
-                            data={data}
-                            carouselWidth={parentWidth}
-                            slideWidth={1000}
-                            slideComponent={Card}
-                            maxVisibleSlide={slides}
-                            currentVisibleSlide={slides}
-                            transitionTime={500}
+                        ref={carouselRef}
+                        data={data}
+                        carouselWidth={parentWidth}
+                        slideWidth={getSlideWidth()}
+                        slideComponent={Card}
+                        maxVisibleSlide={oddAvailableSlides}
+                        currentVisibleSlide={Math.min(currentVisibleSlide, oddAvailableSlides)}
+                        transitionTime={500}
                     />
                 );
             }}/>
@@ -68,6 +84,7 @@ export default ({ pictures }) => {
         return () => {
             if (timeout) {
                 clearTimeout(timeout);
+                timeout = null;
             }
         };
     }, []);
