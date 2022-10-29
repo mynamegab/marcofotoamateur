@@ -7,7 +7,10 @@ export default ({ album }) => {
     const nagivate = useNavigate();
 
     return (
-        <div className="album-container" onClick={() => nagivate('./' + album.id)}>
+        <div className="album-container" onClick={() => {
+            window.scrollTo(0, 0);
+            nagivate('./' + album.id)
+        }}>
             <div className='picture-container'>
                 <LazyLoadedImage src={`https://storage.googleapis.com/marcofotoamateur-gallery/thumbnails/${album.thumbnail.assetId}.${album.thumbnail.format}`} />
                 <div className="pictures-count">

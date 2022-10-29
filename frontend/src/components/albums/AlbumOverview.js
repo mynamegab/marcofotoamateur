@@ -13,6 +13,7 @@ export default () => {
     const pictures = album?.pictures;
 
     const onPictureChosen = (picture) => {
+        window.scrollTo(0, 0);
         navigate(buildWatchAlbumPath(albumId, picture));
     };
 
