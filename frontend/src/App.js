@@ -35,6 +35,11 @@ export default () => {
                             </li>
                         </ul>
                     </div>
+                    <div className='mobile-menu-container'>
+                        <span className="material-symbols-outlined" style={{fontSize: '48px'}}>
+                            menu
+                        </span>
+                    </div>
                 </div>
 
                 <Routes>

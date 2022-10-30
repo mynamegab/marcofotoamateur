@@ -1,8 +1,8 @@
 import "./PicturesOfTheMoment.scss";
 
-import { StackedCarousel, ResponsiveContainer, StackedCarouselSlideProps } from 'react-stacked-center-carousel';
+import { StackedCarousel, ResponsiveContainer } from 'react-stacked-center-carousel';
 import { useEffect, useMemo, useRef } from "react";
-import { memo } from "react";
+
 
 function ResponsiveCarousel({
     onRef,
@@ -41,25 +41,20 @@ function ResponsiveCarousel({
 
                     return parentWidth - 0.1 * parentWidth;
                 };
-
-                const Card = memo(
-                    function (props) {
-                        const { data, dataIndex } = props;
-                        const { cover } = data[dataIndex];
-                        return (
-                            <div style={{ width: '100%', height: getSlideWidth() * 0.6 }}>
-                                <img
-                                    style={{height: '100%', width: '100%', objectFit: 'cover', borderRadius: 10}}
-                                    draggable={false}
-                                    src={cover}
-                                />
-                            </div>
-                        );
-                    },
-                    function (prev, next) {
-                      return prev.dataIndex === next.dataIndex;
-                    }
-                );
+                
+                const Card = (props) => {
+                    const { data, dataIndex, slideIndex } = props;
+                    const { cover } = data[dataIndex];
+                    return (
+                        <div className={`slide depth-${Math.abs(slideIndex)}`} style={{ width: '100%', height: getSlideWidth() * 0.6 }}>
+                            <img
+                                style={{height: '100%', width: '100%', objectFit: 'cover'}}
+                                draggable={false}
+                                src={cover}
+                            />
+                        </div>
+                    );
+                };
 
                 return (
                     <StackedCarousel
@@ -95,7 +90,7 @@ export default ({ pictures }) => {
 
     return (
         <div className="pictures-of-the-moment">
-            <h2>Photos du moment</h2>
+            <h2 className="title">Photos du moment</h2>
             
             <div className="carousel-container">
                 <ResponsiveCarousel pictures={pictures} onRef={(ref) => {
