@@ -1,7 +1,7 @@
 import "./PicturesOfTheMoment.scss";
 
 import { StackedCarousel, ResponsiveContainer } from 'react-stacked-center-carousel';
-import { useEffect, useMemo, useRef } from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 
 
 function ResponsiveCarousel({
@@ -20,15 +20,18 @@ function ResponsiveCarousel({
             <ResponsiveContainer carouselRef={ref} render={(parentWidth, carouselRef) => {
                 onRef(ref);
 
-                const oddAvailableSlides = data.length < 5
-                    ? (data.length < 3
-                        ? 1
-                        : 3)
-                    : 5
+                const oddAvailableSlides = data.length < 7
+                    ? data.length < 5
+                        ? (data.length < 3
+                            ? 1
+                            : 3)
+                        : 5
+                    : 7
 
-                let currentVisibleSlide = 5;
+                let currentVisibleSlide = 7;
+                if (parentWidth <= 1800) currentVisibleSlide = 5;
                 if (parentWidth <= 1440) currentVisibleSlide = 3;
-                if (parentWidth <= 1080) currentVisibleSlide = 1;
+                if (parentWidth <= 1000) currentVisibleSlide = 1;
 
                 const getSlideWidth = () => {
                     if (parentWidth > 1440) {
@@ -42,7 +45,7 @@ function ResponsiveCarousel({
                     return parentWidth - 0.1 * parentWidth;
                 };
                 
-                const Card = (props) => {
+                const Card = React.memo((props) => {
                     const { data, dataIndex, slideIndex } = props;
                     const { cover } = data[dataIndex];
                     return (
@@ -54,7 +57,7 @@ function ResponsiveCarousel({
                             />
                         </div>
                     );
-                };
+                });
 
                 return (
                     <StackedCarousel

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Album from "../mongodb/models/Album.js";
 
 import Homepage from "../mongodb/models/Homepage.js";
 import { pictureExists } from "./pictures.service.js";
@@ -31,6 +32,16 @@ export const addPictureOfTheMoment = async (pictureId) => {
 
     return homepage.picturesOfTheMoment;
 };
+
+export const getLastCreatedPictures = async () => {
+    const albums = await Album.find().sort({ 'pictures.createdAt': -1 }).limit(10);
+    const pictures = albums
+        .reduce((prev, curr) => prev.concat(curr.pictures || []), [])
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .splice(0, 10);
+
+    return pictures;
+}
 
 export const removePictureOfTheMoment = async (pictureId) => {
     await validatePictureExists(pictureId);
